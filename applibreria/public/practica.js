@@ -41,4 +41,55 @@
 	//El modelo ha cambiado
 	
 	//Sincronización de Modelos
-	//
+	//Definimos la prop urlRoot como una url que permite solicitudes REST
+	var libroUno = new Libro({
+		id : '1'
+	});
+	libroUno.fetch(); //Hace una peticion get con la id del modelo "GET /libros/1"
+	libroUno.toJSON();
+
+	var libroDos = new Libro({
+		titulo 		: "Demian",
+		autor 		: "Herman Hesse",
+		categoria 	: "Literatura"
+	});
+	libroDos.save(); //hara una peticion POST sobre la url "/libros" siempre q no haya una id
+
+	libroUno.set({autor:"Desconocido"});
+	libroUno.save(); //ahora save() hace un PUT a la url /libros/{id}, o sea a "/libros/1"
+
+	libroUno.destroy(); //hace un DELETE a la url "/libros/1"
+
+//Cap_4_Vistas
+	//las vistas contienen la lógica de como se deben presentar los datos al usuario
+	//pero no el html, éste está en los templates
+
+	//la propiedad "el" tiene toda la vista contenida en un elemento dom
+	var appView = new Libreria();
+	appView.el;
+	//si anteponemos $ a la propiedad 'el' ('$el') podemos usar todo el potencial de jquery
+	appView.$el.text('hola');
+	appView.$el.append('<b>texto en negritas</b>');
+	appView.$el.append('<b>texto en negritas</b>');
+	
+	//el método render() renderiza la vista!!! 
+	appView.render();
+
+	//eventos: se registran dentro de un hash
+	//su forma es: 'nombre-evento Selector':'Nombre_del_callback'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

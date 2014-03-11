@@ -1,12 +1,12 @@
-var express 	= require('express'),
-	path 		= require('path'),
-	fs   		= require('fs'),
-	uuid   		= require('node-uuid');
+var express = require('express'),
+	path 	= require('path'),
+	fs   	= require('fs'),
+	uuid   	= require('node-uuid');
 
-var app 		= express(),
+var app = express(),
 	baseDeDatos = fs.readFileSync('./datos.json').toString();
 
-var datos 		= JSON.parse(baseDeDatos);
+var datos = JSON.parse(baseDeDatos);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -31,7 +31,37 @@ app.get('/libros', function(req,res) {
 app.get('/libros/:id', function(req,res,next) {
 	var dato;
 
-	for ( var i=0; i= 0; i--) {
+	for ( var i=0; i<datos.length; i++ ) {
+		var libro = datos[i];
+
+		if (libro.id === req.params.id) {
+			dato = libro;
+		}
+	}
+
+	if (dato) {
+		res.send(dato);
+	} else {
+		res.statusCode = 500;
+		return res.send('No se encuentra el id.');
+	}
+
+});
+
+// POST: crear un nuevo libro.
+app.post('/libros', function (req, res){
+	req.body.id = uuid.v1(4);
+
+	datos.push(req.body);
+
+	res.send(200, {id: req.body.id});
+});
+
+// PUT: Actualizar un libro.
+app.put('/libros/:id', function (req, res){
+	var libro;
+
+	for (var i = datos.length - 1; i >= 0; i--) {
 		libro = datos[i];
 
 		if(libro.id === req.params.id){
@@ -42,5 +72,23 @@ app.get('/libros/:id', function(req,res,next) {
 	res.send(200);
 });
 
+// DELETE: Eliminar un libro.
+app.delete('/libros/:id', function (req,res) {
 
-app.listen(3000);
+	var elementoEliminar;
+
+	for ( var i=0; i<datos.length; i++ ) {
+		var libro = datos[i];
+
+		if (libro.id === req.params.id) {
+			elementoEliminar = i;
+		}
+	}
+
+	datos.splice(elementoEliminar, 1);
+
+	res.send(200);
+
+});
+
+app.listen(4000);
