@@ -22,4 +22,3 @@ var Libro = Backbone.Model.extend({
 
 
 
-,

@@ -78,6 +78,70 @@
 	//eventos: se registran dentro de un hash
 	//su forma es: 'nombre-evento Selector':'Nombre_del_callback'
 
+//Cap5_Colecciones
+
+	//La ppal funcionalidad de una coleccion es agregar y eliminar modelos
+	//para lo cual existen dos métodos: add() remove()
+	var a = new Libro({ titulo: 'title 1', autor : 'au 1'});
+	var b = new Libro({ titulo: 'title 2', autor : 'au 2'});
+	var c = new Libro({ titulo: 'title 3', autor : 'au 3'});
+	var libros = new LibrosCollection([a,b]);
+	libros.toJSON();
+	libros.add(c);
+	libros.toJSON();
+	libros.remove(a); //o mas de uno con una lista: libros.remove([a,b]);
+	libros.toJSON();
+
+	//Vemos como devolver modelos de una coleccion
+	var d = new Libro({ titulo: 'dia D', autor : 'lanata', id:6});
+	var libros = new LibrosCollection(d);
+	modeloDevuelto = libros.get(6);
+	modeloDevuelto.toJSON();
+	
+	var e = new Libro({ titulo: 'otro puto libro', autor : 'fuckencio', id:6});
+	var modelCid = libros.add(e);
+	//e.cid="c5";
+	modelCid = libros.get("c5");
+	modelCid.toJSON();
+
+	//Podemos escuchar eventos cuando se agrega o elimina un modelo de la coleccion
+	var libros = new LibrosCollection();
+	libros.on('add', function(){
+		console.log('Se agrego un nuevo modelo a la coleccion');
+	});
+	libros.on('change', function(model){
+		console.log('el modelo con titulo ' + model.titulo + ' ha cambiado');
+	});
+	libros.add([a,b]);
+
+	//el método set() genera una actualizacion inteligente de la coleccion
+	var libros = new LibrosCollection();
+	libros.add([a,b]);
+	libros.set([
+		{id: 4, titulo: 'asd', autor: 'chicha'},
+		{id: 5, titulo: 'dfg', autor: 'rrone'}
+	]);
+	libros.toJSON();
+
+	//El método reset() reemplaza una coleccion con una nueva lista de modelos
+	libros.reset({id: 7, titulo: 'eqeqeqeq', autor: 'asdasdasd'});
+	libros.toJSON();
+	//si no pasamos ningun valor a reset() podemos usar este metodo para limpiar una coleccion.
+	libros.reset();
+
+	//Sincronizar los datos del servidor con nuestras colecciones.
+	//para esto se usa el método fetch()
+	//con fetch() traemos los datos del server y los agregamos como modelos a nuestra coleccion
+	//para que fetch() funcione hay que agregar la propiedad url a la coleccion
+	var libros = new LibrosCollection();
+	libros.fetch();
+	libros.toJSON(); //Efectivamente, ha traido los datos del servidor FUCK YEAH BABY!!
+
+
+
+
+
+
 
 
 
